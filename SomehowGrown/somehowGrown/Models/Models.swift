@@ -109,6 +109,7 @@ struct Kid: Identifiable, Codable, Equatable {
     var cutoff: CutoffType
 
     /// Optional birthday (month: 1-indexed)
+    var birthdayYear: Int?
     var birthdayMonth: Int?
     var birthdayDay: Int?
 }

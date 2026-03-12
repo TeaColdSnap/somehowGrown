@@ -84,11 +84,18 @@ enum EventsEngine {
                 }
 
                 // MARK: School milestones
-                let currentGrade = GradeSystem.currentGrade(
-                    gradeWhenAdded: kid.gradeWhenAdded,
-                    dateRecorded:   kid.dateRecorded,
-                    cutoff:         kid.cutoff
-                )
+                // Use birthday-derived grade when full birthday is available (handles cutoff edge cases);
+                // fall back to the recorded grade otherwise.
+                let currentGrade: Int
+                if let by = kid.birthdayYear, let bm = kid.birthdayMonth, let bd = kid.birthdayDay {
+                    currentGrade = GradeSystem.gradeFromBirthday(year: by, month: bm, day: bd, cutoff: kid.cutoff)
+                } else {
+                    currentGrade = GradeSystem.currentGrade(
+                        gradeWhenAdded: kid.gradeWhenAdded,
+                        dateRecorded:   kid.dateRecorded,
+                        cutoff:         kid.cutoff
+                    )
+                }
                 let milestones  = kid.cutoff == .jp ? jpMilestones  : usMilestones
                 let graduations = kid.cutoff == .jp ? jpGraduations : usGraduations
 

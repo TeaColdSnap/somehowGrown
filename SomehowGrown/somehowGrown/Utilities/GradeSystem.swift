@@ -71,6 +71,22 @@ enum GradeSystem {
         return ageWhenAdded + years
     }
 
+    // MARK: Grade from exact birthday (most accurate — handles cutoff edge cases)
+
+    /// Derives the current grade directly from the full birthday.
+    /// JP cutoff: April 1  (born April 2+ → grade 0 starts one year later)
+    /// US cutoff: Sept 1   (born Sept 1+  → Kindergarten starts one year later)
+    static func gradeFromBirthday(year: Int, month: Int, day: Int, cutoff: CutoffType) -> Int {
+        let grade0EntrySchoolYear: Int
+        if cutoff == .jp {
+            grade0EntrySchoolYear = (month > 4 || (month == 4 && day >= 2)) ? year + 6 : year + 5
+        } else {
+            grade0EntrySchoolYear = (month > 9 || (month == 9 && day >= 1)) ? year + 6 : year + 5
+        }
+        let currentSY = schoolYear(for: Date(), cutoff: cutoff)
+        return currentSY - grade0EntrySchoolYear
+    }
+
     // MARK: Bidirectional suggestions
 
     static func suggestAge(fromGrade grade: Int, cutoff: CutoffType) -> Int {

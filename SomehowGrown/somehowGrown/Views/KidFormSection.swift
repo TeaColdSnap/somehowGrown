@@ -9,6 +9,7 @@ struct KidDraft: Identifiable {
     var grade: Int
     var age: Int
     var cutoff: CutoffType
+    var birthdayYear: Int?
     var birthdayMonth: Int?
     var birthdayDay: Int?
 
@@ -28,6 +29,7 @@ struct KidDraft: Identifiable {
         grade         = kid.gradeWhenAdded
         age           = kid.ageWhenAdded
         cutoff        = kid.cutoff
+        birthdayYear  = kid.birthdayYear
         birthdayMonth = kid.birthdayMonth
         birthdayDay   = kid.birthdayDay
     }
@@ -39,6 +41,11 @@ struct KidFormSection: View {
     @Binding var kid: KidDraft
     /// Pass a closure to show the remove button; nil = only child, hide button
     var onRemove: (() -> Void)?
+
+    private var birthdayYearRange: ClosedRange<Int> {
+        let y = Calendar.current.component(.year, from: Date())
+        return (y - 20)...y
+    }
 
     private var standardAge: Int {
         GradeSystem.suggestAge(fromGrade: kid.grade, cutoff: kid.cutoff)
@@ -161,7 +168,13 @@ struct KidFormSection: View {
             .padding(.vertical, 4)
 
             // MARK: Birthday (optional, collapsible)
-            DisclosureGroup("誕生月日（任意）") {
+            DisclosureGroup("誕生日（任意）") {
+                Picker("年", selection: $kid.birthdayYear) {
+                    Text("未設定").tag(Int?.none)
+                    ForEach((birthdayYearRange).reversed(), id: \.self) { y in
+                        Text("\(y)年").tag(Int?.some(y))
+                    }
+                }
                 Picker("月", selection: $kid.birthdayMonth) {
                     Text("未設定").tag(Int?.none)
                     ForEach(1...12, id: \.self) { m in

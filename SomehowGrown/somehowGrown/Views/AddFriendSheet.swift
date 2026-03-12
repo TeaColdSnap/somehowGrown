@@ -134,6 +134,7 @@ struct AddFriendSheet: View {
                     ageWhenAdded:   draft.age,
                     dateRecorded:   existing?.dateRecorded ?? now,
                     cutoff:         draft.cutoff,
+                    birthdayYear:   draft.birthdayYear,
                     birthdayMonth:  draft.birthdayMonth,
                     birthdayDay:    draft.birthdayDay
                 )
