@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC1B539A2F6A4903003BB5CF /* FriendDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1B53992F6A4903003BB5CF /* FriendDetailView.swift */; };
 		CC909C9F2F60E32B0039DC3E /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC909C9C2F60E32B0039DC3E /* FriendStore.swift */; };
 		CC909CA02F60E32B0039DC3E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC909C9D2F60E32B0039DC3E /* Models.swift */; };
 		CC909CA62F60E3360039DC3E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC909CA42F60E3360039DC3E /* NotificationManager.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CC1B53992F6A4903003BB5CF /* FriendDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailView.swift; sourceTree = "<group>"; };
 		CC909C8E2F60DFB50039DC3E /* somehowGrown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = somehowGrown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC909C9C2F60E32B0039DC3E /* FriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendStore.swift; sourceTree = "<group>"; };
 		CC909C9D2F60E32B0039DC3E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		CC909CAE2F60E33E0039DC3E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CC1B53992F6A4903003BB5CF /* FriendDetailView.swift */,
 				CC909CAA2F60E33E0039DC3E /* AddFriendSheet.swift */,
 				CC909CAB2F60E33E0039DC3E /* ContentView.swift */,
 				CC909CAC2F60E33E0039DC3E /* FriendRowView.swift */,
@@ -182,6 +185,7 @@
 				CC909CA62F60E3360039DC3E /* NotificationManager.swift in Sources */,
 				CC909CA72F60E3360039DC3E /* ContactPicker.swift in Sources */,
 				CC909CA82F60E3360039DC3E /* EventsEngine.swift in Sources */,
+				CC1B539A2F6A4903003BB5CF /* FriendDetailView.swift in Sources */,
 				CC909CA92F60E3360039DC3E /* GradeSystem.swift in Sources */,
 				CC909C9F2F60E32B0039DC3E /* FriendStore.swift in Sources */,
 				CC909CA02F60E32B0039DC3E /* Models.swift in Sources */,

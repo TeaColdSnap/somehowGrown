@@ -20,6 +20,8 @@ struct KidDraft: Identifiable {
         grade         = 1
         age           = 6
         cutoff        = .jp
+        birthdayYear  = Calendar.current.component(.year, from: Date())
+                        - GradeSystem.suggestAge(fromGrade: 1, cutoff: .jp)
     }
 
     init(from kid: Kid) {
@@ -69,6 +71,8 @@ struct KidFormSection: View {
                 .fixedSize()
                 .onChange(of: kid.cutoff) { _, newCutoff in
                     kid.age = GradeSystem.suggestAge(fromGrade: kid.grade, cutoff: newCutoff)
+                    let y = Calendar.current.component(.year, from: Date())
+                    kid.birthdayYear = y - GradeSystem.suggestAge(fromGrade: kid.grade, cutoff: newCutoff)
                 }
                 if let remove = onRemove {
                     Button(role: .destructive, action: remove) {
@@ -143,6 +147,8 @@ struct KidFormSection: View {
                             .labelsHidden()
                             .onChange(of: kid.grade) { _, newGrade in
                                 kid.age = GradeSystem.suggestAge(fromGrade: newGrade, cutoff: kid.cutoff)
+                                let y = Calendar.current.component(.year, from: Date())
+                                kid.birthdayYear = y - GradeSystem.suggestAge(fromGrade: newGrade, cutoff: kid.cutoff)
                             }
                     }
                 }
@@ -172,7 +178,7 @@ struct KidFormSection: View {
                 Picker("年", selection: $kid.birthdayYear) {
                     Text("未設定").tag(Int?.none)
                     ForEach((birthdayYearRange).reversed(), id: \.self) { y in
-                        Text("\(y)年").tag(Int?.some(y))
+                        Text(verbatim: "\(y)年").tag(Int?.some(y))
                     }
                 }
                 Picker("月", selection: $kid.birthdayMonth) {

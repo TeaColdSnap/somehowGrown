@@ -3,7 +3,6 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var store = FriendStore()
     @State private var showingAddFriend = false
-    @State private var editingFriend: Friend?
     @State private var searchText = ""
 
     private var upcomingEvents: [LifeEvent] {
@@ -12,7 +11,10 @@ struct ContentView: View {
 
     private var filteredFriends: [Friend] {
         guard !searchText.isEmpty else { return store.friends }
-        return store.friends.filter { $0.name.localizedStandardContains(searchText) }
+        return store.friends.filter { friend in
+            friend.name.localizedStandardContains(searchText) ||
+            friend.kids.contains { $0.name.localizedStandardContains(searchText) }
+        }
     }
 
     private var groupedFriends: [(key: String, friends: [Friend])] {
@@ -33,6 +35,20 @@ struct ContentView: View {
             .map { (key: $0.key, friends: $0.value) }
     }
 
+    private var groupedUpcomingEvents: [(friendID: String, friendName: String, events: [LifeEvent])] {
+        var indexMap: [String: Int] = [:]
+        var groups: [(friendID: String, friendName: String, events: [LifeEvent])] = []
+        for event in upcomingEvents {
+            if let idx = indexMap[event.friendID] {
+                groups[idx].events.append(event)
+            } else {
+                indexMap[event.friendID] = groups.count
+                groups.append((friendID: event.friendID, friendName: event.friendName, events: [event]))
+            }
+        }
+        return groups
+    }
+
     private var sectionKeys: [String] { groupedFriends.map(\.key) }
 
     var body: some View {
@@ -41,10 +57,12 @@ struct ContentView: View {
                 ZStack(alignment: .trailing) {
                     List {
                         // MARK: Upcoming events
-                        if !upcomingEvents.isEmpty && searchText.isEmpty {
+                        if !groupedUpcomingEvents.isEmpty && searchText.isEmpty {
                             Section {
-                                ForEach(upcomingEvents.prefix(5)) { event in
-                                    UpcomingEventRow(event: event)
+                                ForEach(groupedUpcomingEvents.prefix(5), id: \.friendID) { group in
+                                    NavigationLink(value: group.friendID) {
+                                        UpcomingEventRow(friendName: group.friendName, events: group.events)
+                                    }
                                 }
                             } header: {
                                 Label("近日のイベント", systemImage: "calendar")
@@ -74,12 +92,12 @@ struct ContentView: View {
                             ForEach(groupedFriends, id: \.key) { group in
                                 Section {
                                     ForEach(group.friends) { friend in
-                                        FriendRowView(
-                                            friend: friend,
-                                            accentColor: store.resolvedColor(for: friend).color
-                                        )
-                                        .contentShape(Rectangle())
-                                        .onTapGesture { editingFriend = friend }
+                                        NavigationLink(value: friend.id) {
+                                            FriendRowView(
+                                                friend: friend,
+                                                accentColor: store.resolvedColor(for: friend).color
+                                            )
+                                        }
                                     }
                                     .onDelete { offsets in
                                         let toDelete = offsets.map { group.friends[$0] }
@@ -99,7 +117,10 @@ struct ContentView: View {
                     .listStyle(.insetGrouped)
                     .scrollContentBackground(.hidden)
                     .background(Color.appTheme.ignoresSafeArea())
-                    .searchable(text: $searchText, prompt: "友人を検索")
+                    .searchable(text: $searchText, prompt: "友人・お子さんを検索")
+                    .navigationDestination(for: String.self) { friendID in
+                        FriendDetailView(friendID: friendID, store: store)
+                    }
 
                     // Section index scrubber (hidden during search)
                     if searchText.isEmpty && sectionKeys.count > 1 {
@@ -123,9 +144,6 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddFriend) {
                 AddFriendSheet(store: store)
-            }
-            .sheet(item: $editingFriend) { friend in
-                AddFriendSheet(store: store, editingFriend: friend)
             }
             .task {
                 await NotificationManager.shared.requestPermission()
@@ -162,21 +180,25 @@ private struct SectionIndexView: View {
 // MARK: - Upcoming event row
 
 private struct UpcomingEventRow: View {
-    let event: LifeEvent
+    let friendName: String
+    let events: [LifeEvent]
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(event.friendName)
-                    .font(.subheadline.weight(.semibold))
-                Text("\(event.kidName.isEmpty ? "お子さん" : event.kidName) · \(event.eventLabel)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 4) {
+            Text(friendName)
+                .font(.subheadline.weight(.semibold))
+            ForEach(events) { event in
+                HStack {
+                    Text("\(event.kidName.isEmpty ? "お子さん" : event.kidName) · \(event.eventLabel)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(event.daysUntil == 0 ? "今日!" : "あと\(event.daysUntil)日")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.blue)
+                }
             }
-            Spacer()
-            Text(event.daysUntil == 0 ? "今日!" : "あと\(event.daysUntil)日")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(.blue)
         }
+        .padding(.vertical, 2)
     }
 }

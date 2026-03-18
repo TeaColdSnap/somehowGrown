@@ -4,6 +4,7 @@ import Foundation
 
 struct LifeEvent: Identifiable {
     let id = UUID()
+    let friendID: String
     let friendName: String
     let kidName: String
     let eventLabel: String
@@ -73,6 +74,7 @@ enum EventsEngine {
                             dateRecorded: kid.dateRecorded
                         )
                         events.append(LifeEvent(
+                            friendID:   friend.id,
                             friendName: friend.name,
                             kidName:    kid.name,
                             eventLabel: "\(age)歳の誕生日 🎂",
@@ -106,6 +108,7 @@ enum EventsEngine {
                     let days = cal.dateComponents([.day], from: now, to: date).day ?? 0
                     if days >= 0 && days <= lookAheadDays {
                         events.append(LifeEvent(
+                            friendID:   friend.id,
                             friendName: friend.name,
                             kidName:    kid.name,
                             eventLabel: label,
@@ -122,6 +125,7 @@ enum EventsEngine {
                     let days = cal.dateComponents([.day], from: now, to: date).day ?? 0
                     if days >= 0 && days <= lookAheadDays {
                         events.append(LifeEvent(
+                            friendID:   friend.id,
                             friendName: friend.name,
                             kidName:    kid.name,
                             eventLabel: label,
