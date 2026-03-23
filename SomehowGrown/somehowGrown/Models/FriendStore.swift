@@ -42,7 +42,7 @@ final class FriendStore: ObservableObject {
     private func nextAutoColor() -> FriendColor {
         var freq: [FriendColor: Int] = Dictionary(uniqueKeysWithValues: FriendColor.allCases.map { ($0, 0) })
         for f in friends { if let t = f.colorTag { freq[t, default: 0] += 1 } }
-        return FriendColor.allCases.min(by: { freq[$0]! < freq[$1]! }) ?? .slateBlue
+        return FriendColor.allCases.min(by: { freq[$0]! < freq[$1]! }) ?? .darkTeal
     }
 
     func delete(offsets: IndexSet) {

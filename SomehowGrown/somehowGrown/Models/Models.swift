@@ -4,38 +4,29 @@ import SwiftUI
 // MARK: - FriendColor
 
 enum FriendColor: String, Codable, CaseIterable {
-    case slateBlue  = "slateBlue"
-    case dustyGreen = "dustyGreen"
-    case mutedTeal  = "mutedTeal"
-    case warmGray   = "warmGray"
-    case softPlum   = "softPlum"
-    case earthBrown = "earthBrown"
-    case steelGray  = "steelGray"
-    case deepMoss   = "deepMoss"
+    case darkTeal   = "darkTeal"   // #264653
+    case oceanTeal  = "oceanTeal"  // #2A9D8F
+    case sunYellow  = "sunYellow"  // #E9C46A
+    case sandOrange = "sandOrange" // #F4A261
+    case coral      = "coral"      // #E76F51
 
     var color: Color {
         switch self {
-        case .slateBlue:  return Color(hex: "5B6C8F")
-        case .dustyGreen: return Color(hex: "6B8A73")
-        case .mutedTeal:  return Color(hex: "5F8C8A")
-        case .warmGray:   return Color(hex: "8A817C")
-        case .softPlum:   return Color(hex: "7C6A8A")
-        case .earthBrown: return Color(hex: "8C6F5A")
-        case .steelGray:  return Color(hex: "6E7B85")
-        case .deepMoss:   return Color(hex: "667A5A")
+        case .darkTeal:   return Color(hex: "264653")
+        case .oceanTeal:  return Color(hex: "2A9D8F")
+        case .sunYellow:  return Color(hex: "E9C46A")
+        case .sandOrange: return Color(hex: "F4A261")
+        case .coral:      return Color(hex: "E76F51")
         }
     }
 
     var label: String {
         switch self {
-        case .slateBlue:  return "Slate Blue"
-        case .dustyGreen: return "Dusty Green"
-        case .mutedTeal:  return "Muted Teal"
-        case .warmGray:   return "Warm Gray"
-        case .softPlum:   return "Soft Plum"
-        case .earthBrown: return "Earth Brown"
-        case .steelGray:  return "Steel Gray"
-        case .deepMoss:   return "Deep Moss"
+        case .darkTeal:   return "Dark Teal"
+        case .oceanTeal:  return "Ocean Teal"
+        case .sunYellow:  return "Sun Yellow"
+        case .sandOrange: return "Sand Orange"
+        case .coral:      return "Coral"
         }
     }
 }
@@ -67,18 +58,22 @@ enum Gender: String, Codable, CaseIterable {
     }
 
     var label: String {
-        self == .male ? "男の子" : "女の子"
+        self == .male
+            ? NSLocalizedString("gender_male", comment: "Boy gender label")
+            : NSLocalizedString("gender_female", comment: "Girl gender label")
     }
 }
 
 // MARK: - CutoffType
 
 enum CutoffType: String, Codable, CaseIterable {
-    case jp = "JP"
     case us = "US"
+    case jp = "JP"
 
     var label: String {
-        self == .jp ? "🇯🇵 日本" : "🇺🇸 アメリカ"
+        self == .us
+            ? NSLocalizedString("cutoff_us", comment: "US school system")
+            : NSLocalizedString("cutoff_jp", comment: "JP school system")
     }
 
     /// 1-indexed month when the new school year starts (JP: 4月, US: 9月)

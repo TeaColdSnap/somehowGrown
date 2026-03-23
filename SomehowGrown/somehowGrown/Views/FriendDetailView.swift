@@ -77,7 +77,7 @@ private struct KidDetailRow: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(kid.gender.emoji)
-                Text(kid.name.isEmpty ? "（名前未設定）" : kid.name)
+                Text(verbatim: kid.name.isEmpty ? NSLocalizedString("kid_no_name", comment: "") : kid.name)
                     .font(.headline)
                 Spacer()
                 Text(GradeSystem.label(grade: currentGrade, cutoff: kid.cutoff))
@@ -86,7 +86,7 @@ private struct KidDetailRow: View {
             }
             if let month = kid.birthdayMonth {
                 let day = kid.birthdayDay ?? 1
-                Text("誕生日：\(month)月\(day)日")
+                Text(verbatim: String(format: NSLocalizedString("birthday_display_format", comment: ""), month, day))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -113,7 +113,9 @@ private struct EventDetailRow: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                Text(event.daysUntil == 0 ? "今日!" : "あと\(event.daysUntil)日")
+                Text(verbatim: event.daysUntil == 0
+                    ? NSLocalizedString("今日!", comment: "")
+                    : String(format: NSLocalizedString("days_until_format", comment: ""), event.daysUntil))
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.blue)
                 Text(event.date, style: .date)

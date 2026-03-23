@@ -15,34 +15,34 @@ struct LifeEvent: Identifiable {
     let type: EventType
 }
 
-// MARK: - Milestone tables
+// MARK: - Milestone tables (localized)
 
-private let jpMilestones: [Int: String] = [
-     1: "小学校入学 🎒",
-     7: "中学校入学 🏫",
-    10: "高校入学 🎓",
-    13: "大学入学 🎓",
-]
+private func jpMilestones() -> [Int: String] {[
+     1: NSLocalizedString("jp_milestone_elementary", comment: ""),
+     7: NSLocalizedString("jp_milestone_middle",     comment: ""),
+    10: NSLocalizedString("jp_milestone_high",       comment: ""),
+    13: NSLocalizedString("jp_milestone_college",    comment: ""),
+]}
 
-private let jpGraduations: [Int: String] = [
-     6: "小学校卒業 🌸",
-     9: "中学校卒業 🌸",
-    12: "高校卒業 🌸",
-]
+private func jpGraduations() -> [Int: String] {[
+     6: NSLocalizedString("jp_graduation_elementary", comment: ""),
+     9: NSLocalizedString("jp_graduation_middle",     comment: ""),
+    12: NSLocalizedString("jp_graduation_high",       comment: ""),
+]}
 
-private let usMilestones: [Int: String] = [
-     0: "Kindergarten 🎒",
-     1: "Elementary Start 🏫",
-     6: "Middle School 🏫",
-     9: "High School 🎓",
-    13: "College 🎓",
-]
+private func usMilestones() -> [Int: String] {[
+     0: NSLocalizedString("us_milestone_kindergarten", comment: ""),
+     1: NSLocalizedString("us_milestone_elementary",   comment: ""),
+     6: NSLocalizedString("us_milestone_middle",       comment: ""),
+     9: NSLocalizedString("us_milestone_high",         comment: ""),
+    13: NSLocalizedString("us_milestone_college",      comment: ""),
+]}
 
-private let usGraduations: [Int: String] = [
-     5: "Elementary Graduation 🌸",
-     8: "Middle School Graduation 🌸",
-    12: "High School Graduation 🎓",
-]
+private func usGraduations() -> [Int: String] {[
+     5: NSLocalizedString("us_graduation_elementary", comment: ""),
+     8: NSLocalizedString("us_graduation_middle",     comment: ""),
+    12: NSLocalizedString("us_graduation_high",       comment: ""),
+]}
 
 // MARK: - Engine
 
@@ -77,7 +77,7 @@ enum EventsEngine {
                             friendID:   friend.id,
                             friendName: friend.name,
                             kidName:    kid.name,
-                            eventLabel: "\(age)歳の誕生日 🎂",
+                            eventLabel: String(format: NSLocalizedString("birthday_age_event", comment: ""), age),
                             date:       nextBday,
                             daysUntil:  days,
                             type:       .birthday
@@ -98,8 +98,8 @@ enum EventsEngine {
                         cutoff:         kid.cutoff
                     )
                 }
-                let milestones  = kid.cutoff == .jp ? jpMilestones  : usMilestones
-                let graduations = kid.cutoff == .jp ? jpGraduations : usGraduations
+                let milestones  = kid.cutoff == .jp ? jpMilestones()  : usMilestones()
+                let graduations = kid.cutoff == .jp ? jpGraduations() : usGraduations()
 
                 // Next grade → entrance milestone
                 let nextGrade = currentGrade + 1

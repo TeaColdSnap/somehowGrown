@@ -19,9 +19,9 @@ struct KidDraft: Identifiable {
         gender        = nil
         grade         = 1
         age           = 6
-        cutoff        = .jp
+        cutoff        = .us
         birthdayYear  = Calendar.current.component(.year, from: Date())
-                        - GradeSystem.suggestAge(fromGrade: 1, cutoff: .jp)
+                        - GradeSystem.suggestAge(fromGrade: 1, cutoff: .us)
     }
 
     init(from kid: Kid) {
@@ -162,7 +162,7 @@ struct KidFormSection: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     HStack(spacing: 6) {
-                        Text("\(kid.age)歳")
+                        Text(verbatim: String(format: NSLocalizedString("age_display_format", comment: ""), kid.age))
                             .font(.subheadline.weight(.medium))
                             .frame(minWidth: 36, alignment: .leading)
                         Stepper("", value: $kid.age, in: ageRange)
@@ -178,20 +178,20 @@ struct KidFormSection: View {
                 Picker("年", selection: $kid.birthdayYear) {
                     Text("未設定").tag(Int?.none)
                     ForEach((birthdayYearRange).reversed(), id: \.self) { y in
-                        Text(verbatim: "\(y)年").tag(Int?.some(y))
+                        Text(verbatim: String(format: NSLocalizedString("year_picker_format", comment: ""), y)).tag(Int?.some(y))
                     }
                 }
                 Picker("月", selection: $kid.birthdayMonth) {
                     Text("未設定").tag(Int?.none)
                     ForEach(1...12, id: \.self) { m in
-                        Text("\(m)月").tag(Int?.some(m))
+                        Text(verbatim: String(format: NSLocalizedString("month_picker_format", comment: ""), m)).tag(Int?.some(m))
                     }
                 }
                 if kid.birthdayMonth != nil {
                     Picker("日", selection: $kid.birthdayDay) {
                         Text("未設定").tag(Int?.none)
                         ForEach(1...31, id: \.self) { d in
-                            Text("\(d)日").tag(Int?.some(d))
+                            Text(verbatim: String(format: NSLocalizedString("day_picker_format", comment: ""), d)).tag(Int?.some(d))
                         }
                     }
                 }

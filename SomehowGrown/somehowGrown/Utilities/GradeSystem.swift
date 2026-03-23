@@ -39,8 +39,8 @@ enum GradeSystem {
 
     static func label(grade: Int, cutoff: CutoffType) -> String {
         let map = cutoff == .jp ? jpGrades : usGrades
-        if grade < -3 { return cutoff == .jp ? "未就園" : "Toddler" }
-        if grade > 16 { return cutoff == .jp ? "社会人" : "Graduate" }
+        if grade < -3 { return map[-3] ?? (cutoff == .jp ? "未就園" : "Toddler") }
+        if grade > 16 { return NSLocalizedString("grade_fallback_adult", comment: "Adult/Graduate label") }
         return map[grade] ?? "\(grade)"
     }
 

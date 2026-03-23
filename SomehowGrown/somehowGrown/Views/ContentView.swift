@@ -1,9 +1,13 @@
 import SwiftUI
 
+// MARK: - ContentView
+
 struct ContentView: View {
     @StateObject private var store = FriendStore()
     @State private var showingAddFriend = false
     @State private var searchText = ""
+    /// true once the brand header row has scrolled off screen
+    @State private var navTitleVisible = false
 
     private var upcomingEvents: [LifeEvent] {
         EventsEngine.upcomingEvents(friends: store.friends, lookAheadDays: 60)
@@ -56,6 +60,35 @@ struct ContentView: View {
             ScrollViewReader { proxy in
                 ZStack(alignment: .trailing) {
                     List {
+
+                        // MARK: Brand header row
+                        // Logo (71pt) overlaps the title by 10pt to prevent line wrap.
+                        // onDisappear → navTitleVisible = true  (compact nav title fades in)
+                        // onAppear    → navTitleVisible = false (compact nav title fades out)
+                        Section {
+                            HStack(alignment: .center, spacing: -10) {
+                                Image("SomehowGrownSmallIcon")
+                                    .resizable()
+                                    .interpolation(.high)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 71, height: 71)
+                                    .clipShape(Circle())
+                                Text("SomehowGrown")
+                                    .font(.system(size: 34, weight: .bold))
+                                    .foregroundStyle(Color(hex: "a38153"))
+                                    .lineLimit(1)
+                            }
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                            .onAppear {
+                                withAnimation(.easeInOut(duration: 0.2)) { navTitleVisible = false }
+                            }
+                            .onDisappear {
+                                withAnimation(.easeInOut(duration: 0.2)) { navTitleVisible = true }
+                            }
+                        }
+
                         // MARK: Upcoming events
                         if !groupedUpcomingEvents.isEmpty && searchText.isEmpty {
                             Section {
@@ -85,7 +118,7 @@ struct ContentView: View {
                                 ContentUnavailableView(
                                     "該当なし",
                                     systemImage: "magnifyingglass",
-                                    description: Text("「\(searchText)」に一致する友人が見つかりません")
+                                    description: Text(verbatim: String(format: NSLocalizedString("no_result_format", comment: ""), searchText))
                                 )
                             }
                         } else {
@@ -115,8 +148,6 @@ struct ContentView: View {
                         }
                     }
                     .listStyle(.insetGrouped)
-                    .scrollContentBackground(.hidden)
-                    .background(Color.appTheme.ignoresSafeArea())
                     .searchable(text: $searchText, prompt: "友人・お子さんを検索")
                     .navigationDestination(for: String.self) { friendID in
                         FriendDetailView(friendID: friendID, store: store)
@@ -133,7 +164,14 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("SomehowGrown")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("SomehowGrown")
+                        .foregroundStyle(Color(hex: "a38153"))
+                        .font(.headline)
+                        .opacity(navTitleVisible ? 1 : 0)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showingAddFriend = true
@@ -189,11 +227,13 @@ private struct UpcomingEventRow: View {
                 .font(.subheadline.weight(.semibold))
             ForEach(events) { event in
                 HStack {
-                    Text("\(event.kidName.isEmpty ? "お子さん" : event.kidName) · \(event.eventLabel)")
+                    Text(verbatim: "\(event.kidName.isEmpty ? NSLocalizedString("child_name_fallback", comment: "") : event.kidName) · \(event.eventLabel)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text(event.daysUntil == 0 ? "今日!" : "あと\(event.daysUntil)日")
+                    Text(verbatim: event.daysUntil == 0
+                        ? NSLocalizedString("今日!", comment: "")
+                        : String(format: NSLocalizedString("days_until_format", comment: ""), event.daysUntil))
                         .font(.caption.weight(.bold))
                         .foregroundStyle(.blue)
                 }
