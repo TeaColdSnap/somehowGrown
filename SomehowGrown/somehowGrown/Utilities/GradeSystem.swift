@@ -87,14 +87,38 @@ enum GradeSystem {
         return currentSY - grade0EntrySchoolYear
     }
 
-    // MARK: Bidirectional suggestions
+    // MARK: Bidirectional suggestions (legacy — kept for EventsEngine / currentGrade compatibility)
 
     static func suggestAge(fromGrade grade: Int, cutoff: CutoffType) -> Int {
-        // JP: 小1(1) → 6歳,  US: K(0) → 5歳  — formula same for both
         return grade + 5
     }
 
     static func suggestGrade(fromAge age: Int, cutoff: CutoffType) -> Int {
         return age - 5
+    }
+
+    // MARK: New grade estimation (used by the 1-screen input flow)
+
+    /// Estimate grade from integer age.
+    /// Formula: age - 6, then -1 if current month is before school year start.
+    static func suggestGradeFromAge(_ age: Int, schoolYearStartMonth: Int) -> Int {
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        var grade = age - 6
+        if currentMonth < schoolYearStartMonth {
+            grade -= 1
+        }
+        return grade
+    }
+
+    /// Estimate grade from birth year/month for higher precision.
+    /// Computes exact age in whole years, then calls suggestGradeFromAge.
+    static func suggestGradeFromBirthYearMonth(year: Int, month: Int, schoolYearStartMonth: Int) -> Int {
+        let cal = Calendar.current
+        let now = Date()
+        let currentYear  = cal.component(.year,  from: now)
+        let currentMonth = cal.component(.month, from: now)
+        var age = currentYear - year
+        if currentMonth < month { age -= 1 }
+        return suggestGradeFromAge(age, schoolYearStartMonth: schoolYearStartMonth)
     }
 }

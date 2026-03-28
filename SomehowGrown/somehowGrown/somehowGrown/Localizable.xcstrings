@@ -176,6 +176,23 @@
         }
       }
     },
+    "cutoff_kr" : {
+      "comment" : "KR school system",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🇰🇷 Korea"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🇰🇷 韓国"
+          }
+        }
+      }
+    },
     "cutoff_us" : {
       "comment" : "US school system",
       "localizations" : {

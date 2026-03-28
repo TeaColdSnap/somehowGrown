@@ -69,16 +69,33 @@ enum Gender: String, Codable, CaseIterable {
 enum CutoffType: String, Codable, CaseIterable {
     case us = "US"
     case jp = "JP"
+    case kr = "KR"
 
     var label: String {
-        self == .us
-            ? NSLocalizedString("cutoff_us", comment: "US school system")
-            : NSLocalizedString("cutoff_jp", comment: "JP school system")
+        switch self {
+        case .us: return NSLocalizedString("cutoff_us", comment: "US school system")
+        case .jp: return NSLocalizedString("cutoff_jp", comment: "JP school system")
+        case .kr: return NSLocalizedString("cutoff_kr", comment: "KR school system")
+        }
     }
 
-    /// 1-indexed month when the new school year starts (JP: 4月, US: 9月)
+    /// 1-indexed month when the new school year starts (JP: 4月, KR: 3月, US: 9月)
     var schoolYearStartMonth: Int {
-        self == .jp ? 4 : 9
+        switch self {
+        case .jp: return 4
+        case .kr: return 3
+        case .us: return 9
+        }
+    }
+
+    /// Infer default cutoff from device locale (ja→JP, ko→KR, other→US)
+    static func defaultForLocale() -> CutoffType {
+        let lang = Locale.current.language.languageCode?.identifier ?? ""
+        switch lang {
+        case "ja": return .jp
+        case "ko": return .kr
+        default:   return .us
+        }
     }
 }
 
