@@ -15,6 +15,7 @@ struct AddFriendSheet: View {
     private var canSave: Bool {
         !friendName.trimmingCharacters(in: .whitespaces).isEmpty
             && kids.allSatisfy { $0.gender != nil }
+            && kids.allSatisfy { $0.ageGradeConfirmed }
     }
 
     var body: some View {
@@ -64,7 +65,7 @@ struct AddFriendSheet: View {
                 ForEach($kids) { $kid in
                     KidFormSection(
                         kid: $kid,
-                        onRemove: kids.count > 1 ? { kids.removeAll { $0.id == kid.id } } : nil
+                        onRemove: { kids.removeAll { $0.id == kid.id } }
                     )
                 }
 
@@ -127,16 +128,17 @@ struct AddFriendSheet: View {
                 // Preserve original gradeWhenAdded / ageWhenAdded / dateRecorded on edit
                 let existing = editingFriend?.kids.first { $0.id == draft.id }
                 return Kid(
-                    id:             draft.id,
-                    name:           draft.name.trimmingCharacters(in: .whitespaces),
-                    gender:         gender,
-                    gradeWhenAdded: draft.grade,
-                    ageWhenAdded:   draft.age,
-                    dateRecorded:   existing?.dateRecorded ?? now,
-                    cutoff:         draft.cutoff,
-                    birthdayYear:   draft.birthdayYear,
-                    birthdayMonth:  draft.birthdayMonth,
-                    birthdayDay:    draft.birthdayDay
+                    id:               draft.id,
+                    name:             draft.name.trimmingCharacters(in: .whitespaces),
+                    gender:           gender,
+                    gradeWhenAdded:   draft.grade,
+                    ageWhenAdded:     draft.age,
+                    dateRecorded:     existing?.dateRecorded ?? now,
+                    cutoff:           draft.cutoff,
+                    birthdayYear:     draft.birthdayYear,
+                    birthdayMonth:    draft.birthdayMonth,
+                    birthdayDay:      draft.birthdayDay,
+                    customGradeLabel: draft.customGradeLabel
                 )
             },
             createdAt: editingFriend?.createdAt ?? now,

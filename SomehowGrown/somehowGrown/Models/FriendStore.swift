@@ -50,6 +50,11 @@ final class FriendStore: ObservableObject {
         persist()
     }
 
+    func deleteFriend(id: String) {
+        friends.removeAll { $0.id == id }
+        persist()
+    }
+
     // MARK: - Private
 
     private func persist() {

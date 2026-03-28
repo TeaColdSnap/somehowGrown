@@ -107,6 +107,8 @@ struct Kid: Identifiable, Codable, Equatable {
     var birthdayYear: Int?
     var birthdayMonth: Int?
     var birthdayDay: Int?
+    /// nil = standard grade value; non-nil = 社会人 or free-text label
+    var customGradeLabel: String?
 }
 
 // MARK: - Friend

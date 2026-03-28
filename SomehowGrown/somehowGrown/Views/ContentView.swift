@@ -8,6 +8,8 @@ struct ContentView: View {
     @State private var searchText = ""
     /// true once the brand header row has scrolled off screen
     @State private var navTitleVisible = false
+    /// Friend awaiting delete confirmation
+    @State private var friendPendingDelete: Friend?
 
     private var upcomingEvents: [LifeEvent] {
         EventsEngine.upcomingEvents(friends: store.friends, lookAheadDays: 60)
@@ -133,11 +135,8 @@ struct ContentView: View {
                                         }
                                     }
                                     .onDelete { offsets in
-                                        let toDelete = offsets.map { group.friends[$0] }
-                                        toDelete.forEach { friend in
-                                            if let idx = store.friends.firstIndex(where: { $0.id == friend.id }) {
-                                                store.delete(offsets: IndexSet([idx]))
-                                            }
+                                        if let first = offsets.first {
+                                            friendPendingDelete = group.friends[first]
                                         }
                                     }
                                 } header: {
@@ -182,6 +181,27 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddFriend) {
                 AddFriendSheet(store: store)
+            }
+            .alert(
+                Text(verbatim: String(
+                    format: NSLocalizedString("friend_delete_alert_title", comment: ""),
+                    friendPendingDelete?.name ?? ""
+                )),
+                isPresented: Binding(
+                    get: { friendPendingDelete != nil },
+                    set: { if !$0 { friendPendingDelete = nil } }
+                ),
+                presenting: friendPendingDelete
+            ) { friend in
+                Button(NSLocalizedString("friend_delete_confirm", comment: ""), role: .destructive) {
+                    store.deleteFriend(id: friend.id)
+                    friendPendingDelete = nil
+                }
+                Button("キャンセル", role: .cancel) {
+                    friendPendingDelete = nil
+                }
+            } message: { _ in
+                Text(NSLocalizedString("friend_delete_alert_message", comment: ""))
             }
             .task {
                 await NotificationManager.shared.requestPermission()
