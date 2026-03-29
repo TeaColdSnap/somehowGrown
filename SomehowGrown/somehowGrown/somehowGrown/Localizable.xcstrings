@@ -319,7 +319,6 @@
       }
     },
     "day_picker_format" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1617,7 +1616,6 @@
       }
     },
     "日" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1662,6 +1660,7 @@
       }
     },
     "未設定" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1706,25 +1705,25 @@
         }
       }
     },
-    "生まれた年月も入力する（任意）" : {
-      "comment" : "A label for a toggle section that lets users input their child's birthdate.",
+    "生年月日も入力（任意）" : {
+      "comment" : "A label for a toggle section that lets users input their child's birthday.",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add birth year/month (optional)"
+            "value" : "Add birth date (optional)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Añadir año/mes de nacimiento (opcional)"
+            "value" : "Añadir fecha de nacimiento (opcional)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "添加出生年月（可选）"
+            "value" : "添加出生年月日（可选）"
           }
         }
       }

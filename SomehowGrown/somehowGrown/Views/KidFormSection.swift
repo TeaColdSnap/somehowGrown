@@ -170,6 +170,25 @@ private struct AgeGradeInlineView: View {
         return (y - 25)...y
     }
 
+    private func estimatedBirthYear(for age: Int) -> Int {
+        let cal = Calendar.current
+        let currentYear  = cal.component(.year,  from: Date())
+        let currentMonth = cal.component(.month, from: Date())
+        return currentMonth >= 7 ? currentYear - age : currentYear - age - 1
+    }
+
+    private func daysInMonth() -> ClosedRange<Int> {
+        guard let y = kid.birthdayYear, let m = kid.birthdayMonth else { return 1...31 }
+        var comps = DateComponents()
+        comps.year  = y
+        comps.month = m
+        comps.day   = 1
+        guard let date  = Calendar.current.date(from: comps),
+              let range = Calendar.current.range(of: .day, in: .month, for: date)
+        else { return 1...31 }
+        return 1...range.count
+    }
+
     // MARK: Body
 
     var body: some View {
@@ -194,6 +213,9 @@ private struct AgeGradeInlineView: View {
             kid.age   = age
             kid.grade = computeGrade(age: age)
             kid.ageGradeConfirmed = true
+            if kid.birthdayYear == nil {
+                kid.birthdayYear = estimatedBirthYear(for: age)
+            }
         }
         .onChange(of: kid.cutoff) { _, _ in
             guard let age = enteredAge else { return }
@@ -201,6 +223,7 @@ private struct AgeGradeInlineView: View {
         }
         .onChange(of: kid.birthdayYear)  { _, _ in refreshGrade() }
         .onChange(of: kid.birthdayMonth) { _, _ in refreshGrade() }
+        .onChange(of: kid.birthdayDay)   { _, _ in refreshGrade() }
     }
 
     private func refreshGrade() {
@@ -233,33 +256,48 @@ private struct AgeGradeInlineView: View {
         }
     }
 
-    // MARK: ② 生年月トグルセクション
+    // MARK: ② 生年月日トグルセクション
 
     private var birthMonthSection: some View {
         DisclosureGroup(
             isExpanded: $showBirthMonth,
             content: {
-                HStack(spacing: 0) {
+                HStack(spacing: 8) {
                     Picker("年", selection: $kid.birthdayYear) {
-                        Text("未設定").tag(Int?.none)
+                        Text(verbatim: "-").tag(Int?.none)
                         ForEach(birthYearRange.reversed(), id: \.self) { y in
                             Text(verbatim: String(
                                 format: NSLocalizedString("year_picker_format", comment: ""), y
                             )).tag(Int?.some(y))
                         }
                     }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
                     Picker("月", selection: $kid.birthdayMonth) {
-                        Text("未設定").tag(Int?.none)
+                        Text(verbatim: "-").tag(Int?.none)
                         ForEach(1...12, id: \.self) { m in
                             Text(verbatim: String(
                                 format: NSLocalizedString("month_picker_format", comment: ""), m
                             )).tag(Int?.some(m))
                         }
                     }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                    Picker("日", selection: $kid.birthdayDay) {
+                        Text(verbatim: "-").tag(Int?.none)
+                        ForEach(daysInMonth(), id: \.self) { d in
+                            Text(verbatim: String(
+                                format: NSLocalizedString("day_picker_format", comment: ""), d
+                            )).tag(Int?.some(d))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                    Spacer()
                 }
             },
             label: {
-                Text("生まれた年月も入力する（任意）")
+                Text("生年月日も入力（任意）")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
