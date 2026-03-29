@@ -131,6 +131,9 @@ struct KidFormSection: View {
             .font(.subheadline)
 
             // MARK: School system
+            Text("新学期はいつから？")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             Picker("制度", selection: $kid.cutoff) {
                 ForEach(CutoffType.allCases, id: \.self) { c in
                     Text(c.label).tag(c)

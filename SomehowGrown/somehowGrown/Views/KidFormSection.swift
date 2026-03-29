@@ -162,7 +162,7 @@ private struct AgeGradeInlineView: View {
     }
 
     private func gradeDisplayLabel(_ grade: Int) -> String {
-        GradeSystem.label(grade: grade, cutoff: .jp) + "ごろ"
+        GradeSystem.label(grade: grade, cutoff: kid.cutoff)
     }
 
     private var birthYearRange: ClosedRange<Int> {
@@ -270,27 +270,46 @@ private struct AgeGradeInlineView: View {
 
     private var gradeAndCutoffArea: some View {
         VStack(spacing: 10) {
-            // ③ 学年チップ（左：-1, 中央：現在, 右：+1）
-            HStack(spacing: 6) {
-                gradeChip(grade: kid.grade - 1, isCenter: false)
-                gradeChip(grade: kid.grade,     isCenter: true)
-                gradeChip(grade: kid.grade + 1, isCenter: false)
+            // ③ 学年チップ（横スクロール、-3〜17）
+            ScrollViewReader { proxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(-3...17, id: \.self) { g in
+                            gradeChip(grade: g, isCenter: g == kid.grade)
+                                .id(g)
+                        }
+                    }
+                    .padding(.horizontal, 4)
+                }
+                .onAppear {
+                    proxy.scrollTo(kid.grade, anchor: .center)
+                }
+                .onChange(of: kid.grade) { _, newGrade in
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        proxy.scrollTo(newGrade, anchor: .center)
+                    }
+                }
             }
 
-            // ④ 学期開始月ピル
-            VStack(spacing: 4) {
-                HStack(spacing: 8) {
-                    cutoffPill(.jp, label: "4月")
-                    cutoffPill(.us, label: "9月")
-                    cutoffPill(.kr, label: "3月")
+            // ④ 学期開始月ピル（社会人・Graduate は非表示）
+            if (-2...16).contains(kid.grade) {
+                VStack(spacing: 4) {
+                    Text("新学期はいつから？")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack(spacing: 8) {
+                        cutoffPill(.jp, label: "4月")
+                        cutoffPill(.us, label: "9月")
+                        cutoffPill(.kr, label: "3月")
+                    }
+                    if kid.cutoffAutoDetected {
+                        Text("（端末設定から推定）")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
-                if kid.cutoffAutoDetected {
-                    Text("（端末設定から推定）")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
+                .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
         }
     }
 
@@ -328,7 +347,7 @@ private struct AgeGradeInlineView: View {
                 kid.grade = computeGrade(age: age)
             }
         } label: {
-            Text(label)
+            Text(LocalizedStringKey(label))
                 .font(.caption.weight(selected ? .semibold : .regular))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 6)

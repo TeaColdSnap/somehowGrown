@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy – SomehowGrown</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f2ec;
+      --ink: #1a1712;
+      --muted: #7a7468;
+      --accent: #5c7a5c;
+      --rule: #d4cfc6;
+      --block-bg: #edeae3;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.85;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 64px 48px 40px;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+    }
+
+    .app-name {
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      letter-spacing: -.01em;
+      line-height: 1.1;
+    }
+
+    .meta {
+      text-align: right;
+    }
+
+    .meta p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    /* ── Lang toggle ── */
+    .lang-toggle {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule);
+      padding: 12px 48px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .lang-toggle span {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin-right: 12px;
+    }
+
+    .lang-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      padding: 5px 16px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .lang-btn.active {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    /* ── Main ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 48px 120px;
+    }
+
+    section { display: none; }
+    section.visible { display: block; }
+
+    /* ── Typography ── */
+    .policy-section {
+      margin-bottom: 52px;
+      padding-bottom: 52px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .policy-section:last-child {
+      border-bottom: none;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .18em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+      letter-spacing: -.01em;
+    }
+
+    p { margin-bottom: 16px; color: #2e2b26; }
+    p:last-child { margin-bottom: 0; }
+
+    .highlight-box {
+      background: var(--block-bg);
+      border-left: 3px solid var(--accent);
+      padding: 20px 24px;
+      margin: 24px 0;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .contact-block {
+      background: var(--block-bg);
+      padding: 24px 28px;
+      margin-top: 20px;
+    }
+
+    .contact-block a {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      header { padding: 40px 24px 28px; grid-template-columns: 1fr; }
+      .meta { text-align: left; }
+      .lang-toggle { padding: 12px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <p class="app-name">SomehowGrown</p>
+    <h1>Privacy Policy</h1>
+  </div>
+  <div class="meta">
+    <p>Effective Date</p>
+    <p>2026 / 03 / 28</p>
+    <p>Last Updated</p>
+    <p>2026 / 03 / 28</p>
+  </div>
+</header>
+
+<nav class="lang-toggle">
+  <span>LANG —</span>
+  <button class="lang-btn active" onclick="switchLang('ja')">日本語</button>
+  <button class="lang-btn" onclick="switchLang('en')">English</button>
+</nav>
+
+<main>
+
+  <!-- ===== 日本語 ===== -->
+  <section id="ja" class="visible">
+
+    <div class="policy-section">
+      <p class="section-num">— 01</p>
+      <h2>はじめに</h2>
+      <p>本プライバシーポリシーは、アプリケーション「SomehowGrown」（以下「本アプリ」）のご利用にあたり、個人情報の取り扱いについて説明するものです。</p>
+      <div class="highlight-box">
+        本アプリは、いかなる個人情報もサーバーへ送信・収集しません。すべてのデータはお使いのデバイス内にのみ保存されます。
+      </div>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 02</p>
+      <h2>収集する情報</h2>
+      <p>本アプリは、ユーザーの個人情報を一切収集しません。氏名・メールアドレス・位置情報・カメラデータなど、いかなる情報も取得・送信・保存することはありません。</p>
+      <p>アプリ内で入力・記録されたデータは、すべてお使いのデバイス内（ローカルストレージ）にのみ保存されます。</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 03</p>
+      <h2>第三者へのデータ提供</h2>
+      <p>本アプリは、第三者のSDK・アナリティクスツール・広告サービスを一切使用していないため、いかなる情報も第三者に提供することはありません。</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 04</p>
+      <h2>データの保管とセキュリティ</h2>
+      <p>ユーザーが作成したデータはデバイスのローカルストレージに保管されます。データの管理・削除はユーザー自身の操作によってのみ行われます。</p>
+      <p>アプリをアンインストールすると、デバイス上のすべてのデータが削除されます。</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 05</p>
+      <h2>お子様のプライバシー</h2>
+      <p>本アプリは13歳未満のお子様を対象としておらず、意図的に個人情報を収集することはありません。</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 06</p>
+      <h2>本ポリシーの変更</h2>
+      <p>本プライバシーポリシーは必要に応じて更新されることがあります。変更がある場合は、このページの「最終更新日」を修正してお知らせします。重大な変更がある場合はアプリ内でもお知らせします。</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 07</p>
+      <h2>お問い合わせ</h2>
+      <p>本プライバシーポリシーに関するご質問がございましたら、以下よりお問い合わせください。</p>
+      <div class="contact-block">
+        <p>Email: <a href="mailto:somehowGrown.app@gmail.com">somehowGrown.app@gmail.com</a></p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== English ===== -->
+  <section id="en">
+
+    <div class="policy-section">
+      <p class="section-num">— 01</p>
+      <h2>Introduction</h2>
+      <p>This Privacy Policy describes how the application "SomehowGrown" (the "App") handles your information.</p>
+      <div class="highlight-box">
+        The App does not collect, transmit, or store any personal information on external servers. All data remains solely on your device.
+      </div>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 02</p>
+      <h2>Information We Collect</h2>
+      <p>We do not collect any personal information. This includes, but is not limited to, names, email addresses, location data, and camera data. No information is transmitted from your device to any server.</p>
+      <p>All data you enter or generate within the App is stored exclusively on your device (local storage).</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 03</p>
+      <h2>Third-Party Services</h2>
+      <p>The App does not use any third-party SDKs, analytics tools, or advertising services. Therefore, no information is shared with any third parties.</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 04</p>
+      <h2>Data Storage and Security</h2>
+      <p>Data created by you is stored on your device's local storage and is managed entirely by you. You may delete your data at any time through the App's settings or by uninstalling the App.</p>
+      <p>Uninstalling the App will permanently delete all data stored on your device.</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 05</p>
+      <h2>Children's Privacy</h2>
+      <p>The App is not directed at children under the age of 13, and we do not knowingly collect personal information from children under 13.</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 06</p>
+      <h2>Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. When we do, we will revise the "Last Updated" date at the top of this page. For significant changes, we will also notify you within the App.</p>
+    </div>
+
+    <div class="policy-section">
+      <p class="section-num">— 07</p>
+      <h2>Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+      <div class="contact-block">
+        <p>Email: <a href="mailto:somehowGrown.app@gmail.com">somehowGrown.app@gmail.com</a></p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 SomehowGrown</p>
+  <p>All data stays on your device.</p>
+</footer>
+
+<script>
+  function switchLang(lang) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(lang).classList.add('visible');
+    document.querySelector(`[onclick="switchLang('${lang}')"]`).classList.add('active');
+    document.documentElement.lang = lang;
+  }
+</script>
+
+</body>
+</html>
