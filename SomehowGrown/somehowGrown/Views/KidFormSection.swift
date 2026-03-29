@@ -171,10 +171,7 @@ private struct AgeGradeInlineView: View {
     }
 
     private func estimatedBirthYear(for age: Int) -> Int {
-        let cal = Calendar.current
-        let currentYear  = cal.component(.year,  from: Date())
-        let currentMonth = cal.component(.month, from: Date())
-        return currentMonth >= 7 ? currentYear - age : currentYear - age - 1
+        return Calendar.current.component(.year, from: Date()) - age
     }
 
     private func daysInMonth() -> ClosedRange<Int> {
@@ -213,7 +210,7 @@ private struct AgeGradeInlineView: View {
             kid.age   = age
             kid.grade = computeGrade(age: age)
             kid.ageGradeConfirmed = true
-            if kid.birthdayYear == nil {
+            if !showBirthMonth {
                 kid.birthdayYear = estimatedBirthYear(for: age)
             }
         }
